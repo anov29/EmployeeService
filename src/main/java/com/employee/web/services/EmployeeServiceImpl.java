@@ -2,6 +2,8 @@ package com.employee.web.services;
 
 import com.employee.web.model.Employee;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 
@@ -11,6 +13,8 @@ import java.util.HashMap;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(EmployeeServiceImpl.class);
 
     private final HashMap<Long, Employee> activeEmployees = new HashMap<>();
     private final HashMap<Long, Employee> inactiveEmployees = new HashMap<>();
@@ -26,7 +30,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
             // create an active and inactve employee map
             for (Employee e : employees) {
-                System.out.println(e.getFirstName());
+                LOGGER.debug(e.getFirstName());
                 if (e.getStatus() == Employee.State.ACTIVE) {
                     activeEmployees.put(e.getId(), e);
                 } else {
