@@ -1,4 +1,6 @@
-package com.employee.employeeservice.model;
+package com.employee.web.model;
+
+import java.util.Date;
 
 public class Employee {
 
@@ -6,21 +8,31 @@ public class Employee {
     private String firstName;
     private String middleInitial;
     private String lastName;
-    private int dateOfBirth;
-    private int dateOfEmployment;
-    private String status;
+    private Date dateOfBirth;
+    private Date dateOfEmployment;
+    private State status;
+
+    private enum State {
+        ACTIVE,
+        INACTIVE
+    }
 
     public Employee() {
     }
 
-    public Employee(long id, String firstName, String middleInitial, String lastName, int dateOfBirth, int dateOfEmployment, String status) {
+    public Employee(long id, String firstName, String middleInitial, String lastName, Date dateOfBirth, Date dateOfEmployment, String status) {
         this.id = id;
         this.firstName = firstName;
         this.middleInitial = middleInitial;
         this.lastName = lastName;
         this.dateOfBirth = dateOfBirth;
         this.dateOfEmployment = dateOfEmployment;
-        this.status = status;
+
+        try {
+            this.status = State.valueOf(status);
+        } catch (IllegalArgumentException e) {
+            this.status = State.INACTIVE;
+        }
     }
 
     public long getId() {
@@ -39,15 +51,15 @@ public class Employee {
         return lastName;
     }
 
-    public int getDateOfBirth() {
+    public Date getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public int getDateOfEmployment() {
+    public Date getDateOfEmployment() {
         return dateOfEmployment;
     }
 
-    public String getStatus() {
+    public State getStatus() {
         return status;
     }
 }

@@ -1,6 +1,6 @@
-package com.employee.employeeservice;
+package com.employee.web;
 
-import com.employee.employeeservice.model.Employee;
+import com.employee.web.model.Employee;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -8,8 +8,6 @@ import org.springframework.util.ResourceUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 
 @SpringBootApplication
 public class EmployeeServiceApplication {
@@ -24,6 +22,7 @@ public class EmployeeServiceApplication {
 
 			for (Employee e : employees) {
 				System.out.println(e.getFirstName());
+				System.out.println(e.getStatus());
 			}
 
 

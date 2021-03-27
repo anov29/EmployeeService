@@ -4,8 +4,8 @@
     "firstName": "Bob",
     "middleInitial": "S",
     "lastName": "Stevens",
-    "dateOfBirth": 1996,
-    "dateOfEmployment": 2004,
+    "dateOfBirth": "1970-01-01T02:30:00.000+00:00",
+    "dateOfEmployment": "2001-01-05T04:30:00.000+00:00",
     "status": "ACTIVE"
   },
   {
@@ -13,8 +13,8 @@
     "firstName": "Johnny",
     "middleInitial": "B",
     "lastName": "Goode",
-    "dateOfBirth": 1958,
-    "dateOfEmployment": 2008,
+    "dateOfBirth": "1958-06-01T02:30:00.000+00:00",
+    "dateOfEmployment": "2018-04-01T07:30:00.000+00:00",
     "status": "ACTIVE"
   },
   {
@@ -22,8 +22,8 @@
     "firstName": "Sally",
     "middleInitial": "G",
     "lastName": "Forte",
-    "dateOfBirth": 1958,
-    "dateOfEmployment": 2018,
+    "dateOfBirth": "2001-12-01T02:30:00.000+00:00",
+    "dateOfEmployment": "2020-04-03T02:30:00.000+00:00",
     "status": "INACTIVE"
   }
 ]
