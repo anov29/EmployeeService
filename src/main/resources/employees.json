@@ -1,0 +1,29 @@
+[
+  {
+    "id": "1",
+    "firstName": "Bob",
+    "middleInitial": "S",
+    "lastName": "Stevens",
+    "dateOfBirth": 1996,
+    "dateOfEmployment": 2004,
+    "status": "ACTIVE"
+  },
+  {
+    "id": "2",
+    "firstName": "Johnny",
+    "middleInitial": "B",
+    "lastName": "Goode",
+    "dateOfBirth": 1958,
+    "dateOfEmployment": 2008,
+    "status": "ACTIVE"
+  },
+  {
+    "id": "3",
+    "firstName": "Sally",
+    "middleInitial": "G",
+    "lastName": "Forte",
+    "dateOfBirth": 1958,
+    "dateOfEmployment": 2018,
+    "status": "INACTIVE"
+  }
+]
