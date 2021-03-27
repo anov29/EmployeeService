@@ -1,4 +1,4 @@
-package com.employee.employeeservice;
+package com.employee.employeeservice.model;
 
 public class Greeting {
 
