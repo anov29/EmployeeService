@@ -12,7 +12,7 @@ public class Employee {
     private Date dateOfEmployment;
     private State status;
 
-    private enum State {
+    public enum State {
         ACTIVE,
         INACTIVE
     }

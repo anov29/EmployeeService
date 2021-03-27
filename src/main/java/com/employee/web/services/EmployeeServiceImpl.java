@@ -1,0 +1,56 @@
+package com.employee.web.services;
+
+import com.employee.web.model.Employee;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.stereotype.Service;
+import org.springframework.util.ResourceUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+
+@Service
+public class EmployeeServiceImpl implements EmployeeService {
+
+    private final HashMap<Long, Employee> activeEmployees = new HashMap<>();
+    private final HashMap<Long, Employee> inactiveEmployees = new HashMap<>();
+
+    public EmployeeServiceImpl() {
+
+        // read json config
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            String fileName = "employees.json";
+            File file = ResourceUtils.getFile("classpath:" + fileName);
+            Employee[] employees = mapper.readValue(file, Employee[].class);
+
+            // create an active and inactve employee map
+            for (Employee e : employees) {
+                System.out.println(e.getFirstName());
+                if (e.getStatus() == Employee.State.ACTIVE) {
+                    activeEmployees.put(e.getId(), e);
+                } else {
+                    inactiveEmployees.put(e.getId(), e);
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public HashMap<Long, Employee> getActiveEmployees() {
+        return activeEmployees;
+    }
+
+    @Override
+    public HashMap<Long, Employee> getInactiveEmployees() {
+        return inactiveEmployees;
+    }
+
+    @Override
+    public void deleteEmployee(Employee e) {
+        activeEmployees.remove(e.getId());
+    }
+}
