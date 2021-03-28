@@ -21,6 +21,7 @@ public class Employee {
     }
 
     public Employee(long id, String firstName, String middleInitial, String lastName, Date dateOfBirth, Date dateOfEmployment, String status) {
+
         this.id = id;
         this.firstName = firstName;
         this.middleInitial = middleInitial;

@@ -10,4 +10,6 @@ public interface EmployeeService {
     HashMap<Long, Employee> getInactiveEmployees();
 
     void deleteEmployee(Employee e);
+
+    boolean createEmployee(Employee e);
 }

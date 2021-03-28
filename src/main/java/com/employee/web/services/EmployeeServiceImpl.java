@@ -57,4 +57,19 @@ public class EmployeeServiceImpl implements EmployeeService {
     public void deleteEmployee(Employee e) {
         activeEmployees.remove(e.getId());
     }
+
+    @Override
+    public boolean createEmployee(Employee e) {
+        try {
+            if (e.getStatus() == Employee.State.ACTIVE) {
+                activeEmployees.put(e.getId(), e);
+            } else {
+                inactiveEmployees.put(e.getId(), e);
+            }
+            return true;
+        } catch (Exception ex) {
+            LOGGER.error("Error adding employee ", ex);
+            return false;
+        }
+    }
 }
