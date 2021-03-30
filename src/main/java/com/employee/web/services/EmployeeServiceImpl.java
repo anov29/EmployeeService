@@ -28,7 +28,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             File file = ResourceUtils.getFile("classpath:" + fileName);
             Employee[] employees = mapper.readValue(file, Employee[].class);
 
-            // create an active and inactve employee map
+            // create an active and inactive employee map
             for (Employee e : employees) {
                 LOGGER.debug(e.getFirstName());
                 if (e.getStatus() == Employee.State.ACTIVE) {

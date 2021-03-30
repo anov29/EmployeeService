@@ -53,7 +53,6 @@ public class EmployeeController {
     public ResponseEntity<String> newEmployee(@RequestBody Employee newEmployee) {
         try {
             // validation
-            // note that no id will be deserialized to 0 by jackson
             if (!verifyEmployee(newEmployee)) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Fields {FirstName, LastName, DateOfBirth, DateOfEmployment} cannot be null.");
             }
@@ -71,8 +70,8 @@ public class EmployeeController {
         return ResponseEntity.status(HttpStatus.OK).body("Successfully created employee " + newEmployee.getId());
     }
 
-    @PutMapping("/employees/{id}")
-    public ResponseEntity<String> updateEmployee(@RequestBody Employee employee, @PathVariable Long id) {
+    @PutMapping("/employees")
+    public ResponseEntity<String> updateEmployee(@RequestBody Employee employee) {
         if(!verifyEmployee(employee)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Fields {FirstName, LastName, DateOfBirth, DateOfEmployment} cannot be null.");
         }
@@ -87,12 +86,12 @@ public class EmployeeController {
         boolean status = employeeService.updateEmployee(employee);
         if (!status) return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Could not create new employee with id " + employee.getId());
 
-        return ResponseEntity.status(HttpStatus.OK).body("Successfully updated employee " + employee.getId());
+        return ResponseEntity.status(HttpStatus.OK).body("Successfully updated employee ID" + employee.getId());
     }
-
     // returns true if employee contains required fields
     private boolean verifyEmployee(Employee e) {
         // Status can be null, and will be made ACTIVE by default
+        // no id will be deserialized to 0 by jackson
         return (e.getFirstName() != null && e.getLastName() != null && e.getDateOfEmployment() != null
                 && e.getDateOfBirth() != null);
     }

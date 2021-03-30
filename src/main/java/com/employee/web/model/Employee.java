@@ -1,6 +1,7 @@
 package com.employee.web.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Date;
 
@@ -23,7 +24,12 @@ public class Employee {
     }
 
     @JsonCreator
-    public Employee(long id, String firstName, String middleInitial, String lastName, Date dateOfBirth, Date dateOfEmployment, String status) {
+    public Employee(@JsonProperty("id") long id,@JsonProperty("firstName") String firstName,@JsonProperty("middleInitial") String middleInitial,
+                    @JsonProperty("lastName") String lastName,@JsonProperty("dateOfBirth") Date dateOfBirth,@JsonProperty("dateOfEmployment") Date dateOfEmployment,
+                    @JsonProperty("status") String status) {
+
+        // date of employment cannot be before birth
+        if(dateOfEmployment.before(dateOfBirth)) throw new IllegalArgumentException();
 
         this.id = id;
         this.firstName = firstName;
