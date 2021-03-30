@@ -57,9 +57,16 @@ public class EmployeeServiceImpl implements EmployeeService {
     public boolean hasEmployee(Employee e) { return (activeEmployees.containsKey(e.getId()) || inactiveEmployees.containsKey(e.getId())); }
 
     @Override
-    public void deleteEmployee(Employee e) {
-        activeEmployees.remove(e.getId());
-        inactiveEmployees.put(e.getId(), e);
+    public boolean deleteEmployee(Long id) {
+        try {
+            Employee e = activeEmployees.get(id);
+            activeEmployees.remove(id);
+            inactiveEmployees.put(e.getId(), e);
+            return true;
+        } catch (Exception e) {
+            LOGGER.error("Error deleting employee " + id);
+            return false;
+        }
     }
 
     @Override

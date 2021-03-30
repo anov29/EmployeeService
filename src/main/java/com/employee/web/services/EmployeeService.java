@@ -12,9 +12,10 @@ public interface EmployeeService {
 
     boolean hasEmployee(Employee e);
 
-    void deleteEmployee(Employee e);
+    boolean deleteEmployee(Long id);
 
     boolean createEmployee(Employee e);
 
     boolean updateEmployee(Employee e);
+
 }

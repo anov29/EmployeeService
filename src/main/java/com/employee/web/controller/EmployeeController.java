@@ -52,8 +52,7 @@ public class EmployeeController {
     @PostMapping("/employees")
     public ResponseEntity<String> newEmployee(@RequestBody Employee newEmployee) {
         try {
-            // validation
-            if (!verifyEmployee(newEmployee)) {
+            if (missingFields(newEmployee)) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Fields {FirstName, LastName, DateOfBirth, DateOfEmployment} cannot be null.");
             }
             if (employeeService.hasEmployee(newEmployee)) {
@@ -65,35 +64,61 @@ public class EmployeeController {
             if (!status) return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Could not create new employee with id " + newEmployee.getId());
         } catch (Exception e) {
             LOGGER.error("Exception in newEmployee creation ", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Exception creating newEmployee.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Exception creating newEmployee with id " + newEmployee.getId());
         }
         return ResponseEntity.status(HttpStatus.OK).body("Successfully created employee " + newEmployee.getId());
     }
 
     @PutMapping("/employees")
     public ResponseEntity<String> updateEmployee(@RequestBody Employee employee) {
-        if(!verifyEmployee(employee)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Fields {FirstName, LastName, DateOfBirth, DateOfEmployment} cannot be null.");
-        }
-        if (!employeeService.hasEmployee(employee)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Employee with ID " + employee.getId() +
-                    " does not exist. Please use a existing ID or use a POST request to create an employee");
-        }
-        if (employeeService.getActiveEmployees().containsKey(employee.getId()) && employee.getStatus() == Employee.State.INACTIVE) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("PUT request cannot make employee inactive. Please use delete request instead");
-        }
+        try {
+            if (missingFields(employee)) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Fields {FirstName, LastName, DateOfBirth, DateOfEmployment} cannot be null.");
+            }
+            if (!employeeService.hasEmployee(employee)) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Employee with ID " + employee.getId() +
+                        " does not exist. Please use a existing ID or use a POST request to create an employee");
+            }
+            if (employeeService.getActiveEmployees().containsKey(employee.getId()) && employee.getStatus() == Employee.State.INACTIVE) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("PUT request cannot make employee inactive. Please use delete request instead");
+            }
 
-        boolean status = employeeService.updateEmployee(employee);
-        if (!status) return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Could not create new employee with id " + employee.getId());
+            boolean status = employeeService.updateEmployee(employee);
+            if (!status)
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Could not create new employee with id " + employee.getId());
+        } catch (Exception e) {
+            LOGGER.error("Exception in updateEmployee ", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Exception updating employee with id " + employee.getId());
 
+        }
         return ResponseEntity.status(HttpStatus.OK).body("Successfully updated employee ID" + employee.getId());
     }
-    // returns true if employee contains required fields
-    private boolean verifyEmployee(Employee e) {
+
+
+    @DeleteMapping("/employees/{id}")
+    public ResponseEntity<String> deleteEmployee(@PathVariable Long id) {
+        try {
+            if (!employeeService.getActiveEmployees().containsKey(id)) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No active employee with id " + id);
+            }
+
+            boolean status = employeeService.deleteEmployee(id);
+            if (!status)
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Could not delete employee with id " + id);
+        } catch (Exception e) {
+            LOGGER.error("Exception in deleteEmployee ", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Exception deleting employee with id " + id);
+
+        }
+        return ResponseEntity.status(HttpStatus.OK).body("Successfully deleted employee with ID: " + id);
+    }
+
+    // returns true if employee missing required fields
+    private boolean missingFields(Employee e) {
         // Status can be null, and will be made ACTIVE by default
         // no id will be deserialized to 0 by jackson
-        return (e.getFirstName() != null && e.getLastName() != null && e.getDateOfEmployment() != null
-                && e.getDateOfBirth() != null);
+        return (e.getFirstName() == null || e.getLastName() == null || e.getDateOfEmployment() == null
+                || e.getDateOfBirth() == null);
     }
 
 }
