@@ -1,5 +1,7 @@
 package com.employee.web.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 import java.util.Date;
 
 public class Employee {
@@ -20,6 +22,7 @@ public class Employee {
     public Employee() {
     }
 
+    @JsonCreator
     public Employee(long id, String firstName, String middleInitial, String lastName, Date dateOfBirth, Date dateOfEmployment, String status) {
 
         this.id = id;
@@ -29,10 +32,14 @@ public class Employee {
         this.dateOfBirth = dateOfBirth;
         this.dateOfEmployment = dateOfEmployment;
 
-        try {
-            this.status = State.valueOf(status);
-        } catch (IllegalArgumentException e) {
-            this.status = State.INACTIVE;
+        if (status == null) {
+            this.status = State.ACTIVE; // by default employees are active
+        } else {
+            try {
+                this.status = State.valueOf(status);
+            } catch (IllegalArgumentException e) {
+                this.status = State.ACTIVE; // by default employees are active
+            }
         }
     }
 

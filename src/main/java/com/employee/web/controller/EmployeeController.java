@@ -54,11 +54,10 @@ public class EmployeeController {
         try {
             // validation
             // note that no id will be deserialized to 0 by jackson
-            if (newEmployee.getFirstName() == null || newEmployee.getLastName() == null || newEmployee.getDateOfEmployment() == null
-                || newEmployee.getDateOfBirth() == null || newEmployee.getStatus() == null) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Fields {FirstName, LastName, DateOfBirth, DateOfEmployment, Status} cannot be null.");
+            if (!verifyEmployee(newEmployee)) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Fields {FirstName, LastName, DateOfBirth, DateOfEmployment} cannot be null.");
             }
-            if (employeeService.getActiveEmployees().containsKey(newEmployee.getId()) || employeeService.getInactiveEmployees().containsKey(newEmployee.getId())) {
+            if (employeeService.hasEmployee(newEmployee)) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Employee with ID " + newEmployee.getId() +
                         " already exists. Please use a unique ID or use a PUT request to update an employee");
             }
@@ -70,6 +69,32 @@ public class EmployeeController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Exception creating newEmployee.");
         }
         return ResponseEntity.status(HttpStatus.OK).body("Successfully created employee " + newEmployee.getId());
+    }
+
+    @PutMapping("/employees/{id}")
+    public ResponseEntity<String> updateEmployee(@RequestBody Employee employee, @PathVariable Long id) {
+        if(!verifyEmployee(employee)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Fields {FirstName, LastName, DateOfBirth, DateOfEmployment} cannot be null.");
+        }
+        if (!employeeService.hasEmployee(employee)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Employee with ID " + employee.getId() +
+                    " does not exist. Please use a existing ID or use a POST request to create an employee");
+        }
+        if (employeeService.getActiveEmployees().containsKey(employee.getId()) && employee.getStatus() == Employee.State.INACTIVE) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("PUT request cannot make employee inactive. Please use delete request instead");
+        }
+
+        boolean status = employeeService.updateEmployee(employee);
+        if (!status) return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Could not create new employee with id " + employee.getId());
+
+        return ResponseEntity.status(HttpStatus.OK).body("Successfully updated employee " + employee.getId());
+    }
+
+    // returns true if employee contains required fields
+    private boolean verifyEmployee(Employee e) {
+        // Status can be null, and will be made ACTIVE by default
+        return (e.getFirstName() != null && e.getLastName() != null && e.getDateOfEmployment() != null
+                && e.getDateOfBirth() != null);
     }
 }
 

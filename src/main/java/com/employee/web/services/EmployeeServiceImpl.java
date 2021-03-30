@@ -54,8 +54,12 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    public boolean hasEmployee(Employee e) { return (activeEmployees.containsKey(e.getId()) || inactiveEmployees.containsKey(e.getId())); }
+
+    @Override
     public void deleteEmployee(Employee e) {
         activeEmployees.remove(e.getId());
+        inactiveEmployees.put(e.getId(), e);
     }
 
     @Override
@@ -69,6 +73,24 @@ public class EmployeeServiceImpl implements EmployeeService {
             return true;
         } catch (Exception ex) {
             LOGGER.error("Error adding employee ", ex);
+            return false;
+        }
+    }
+
+    @Override
+    public boolean updateEmployee(Employee e) {
+        try {
+            activeEmployees.remove(e.getId());
+            inactiveEmployees.remove(e.getId());
+
+            if (e.getStatus() == Employee.State.ACTIVE) {
+                activeEmployees.put(e.getId(), e);
+            } else {
+                inactiveEmployees.put(e.getId(), e);
+            }
+            return true;
+        } catch (Exception ex) {
+            LOGGER.error("Error updating employee ", ex);
             return false;
         }
     }
