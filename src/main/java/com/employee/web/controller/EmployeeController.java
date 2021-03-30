@@ -35,7 +35,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/employees/{id}")
-    public ResponseEntity<Employee> getEmployee(@PathVariable("id") Long id) {
+    public ResponseEntity<Employee> getEmployee(@PathVariable("id") Long id) throws IllegalArgumentException {
         try {
             if (!employeeService.getActiveEmployees().containsKey(id)) {
                 LOGGER.info("Server retrieved bad request id {}", id);
@@ -95,6 +95,7 @@ public class EmployeeController {
         return (e.getFirstName() != null && e.getLastName() != null && e.getDateOfEmployment() != null
                 && e.getDateOfBirth() != null);
     }
+
 }
 
 
