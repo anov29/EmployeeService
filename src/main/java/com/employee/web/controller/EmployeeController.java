@@ -61,12 +61,14 @@ public class EmployeeController {
             }
 
             boolean status = employeeService.createEmployee(newEmployee);
-            if (!status) return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Could not create new employee with id " + newEmployee.getId());
+            if (!status) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Could not create new employee with id " + newEmployee.getId());
+            }
+            return ResponseEntity.status(HttpStatus.OK).body("Successfully created employee " + newEmployee.getId());
         } catch (Exception e) {
             LOGGER.error("Exception in newEmployee creation ", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Exception creating newEmployee with id " + newEmployee.getId());
         }
-        return ResponseEntity.status(HttpStatus.OK).body("Successfully created employee " + newEmployee.getId());
     }
 
     @PutMapping("/employees")
@@ -84,16 +86,16 @@ public class EmployeeController {
             }
 
             boolean status = employeeService.updateEmployee(employee);
-            if (!status)
+            if (!status) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Could not create new employee with id " + employee.getId());
+            }
+            return ResponseEntity.status(HttpStatus.OK).body("Successfully updated employee ID" + employee.getId());
         } catch (Exception e) {
             LOGGER.error("Exception in updateEmployee ", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Exception updating employee with id " + employee.getId());
 
         }
-        return ResponseEntity.status(HttpStatus.OK).body("Successfully updated employee ID" + employee.getId());
     }
-
 
     @DeleteMapping("/employees/{id}")
     public ResponseEntity<String> deleteEmployee(@PathVariable Long id) {
@@ -103,14 +105,15 @@ public class EmployeeController {
             }
 
             boolean status = employeeService.deleteEmployee(id);
-            if (!status)
+            if (!status) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Could not delete employee with id " + id);
+            }
+            return ResponseEntity.status(HttpStatus.OK).body("Successfully deleted employee with ID: " + id);
+
         } catch (Exception e) {
             LOGGER.error("Exception in deleteEmployee ", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Exception deleting employee with id " + id);
-
         }
-        return ResponseEntity.status(HttpStatus.OK).body("Successfully deleted employee with ID: " + id);
     }
 
     // returns true if employee missing required fields
@@ -120,7 +123,6 @@ public class EmployeeController {
         return (e.getFirstName() == null || e.getLastName() == null || e.getDateOfEmployment() == null
                 || e.getDateOfBirth() == null);
     }
-
 }
 
 
