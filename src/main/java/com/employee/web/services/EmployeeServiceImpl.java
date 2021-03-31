@@ -4,11 +4,11 @@ import com.employee.web.model.Employee;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 
-import java.io.File;
-import java.io.IOException;
+import javax.annotation.PostConstruct;
 import java.util.HashMap;
 
 @Service
@@ -16,31 +16,20 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EmployeeServiceImpl.class);
 
-    private final HashMap<Long, Employee> activeEmployees = new HashMap<>();
-    private final HashMap<Long, Employee> inactiveEmployees = new HashMap<>();
+    private HashMap<Long, Employee> activeEmployees = new HashMap<>();
+    private HashMap<Long, Employee> inactiveEmployees = new HashMap<>();
 
-    public EmployeeServiceImpl() {
+    private JSONLoaderService jsonLoaderService;
 
-        // read json config
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            String fileName = "employees.json";
-            File file = ResourceUtils.getFile("classpath:" + fileName);
-            Employee[] employees = mapper.readValue(file, Employee[].class);
+    @Autowired
+    public void setJsonLoaderService(JSONLoaderService jsonLoaderService) {
+        this.jsonLoaderService = jsonLoaderService;
+    }
 
-            // create an active and inactive employee map
-            for (Employee e : employees) {
-                LOGGER.debug(e.getFirstName());
-                if (e.getStatus() == Employee.State.ACTIVE) {
-                    activeEmployees.put(e.getId(), e);
-                } else {
-                    inactiveEmployees.put(e.getId(), e);
-                }
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    @PostConstruct
+    public void loadJSON() {
+        activeEmployees = jsonLoaderService.getLoadedActiveEmployees();
+        inactiveEmployees = jsonLoaderService.getLoadedInactiveEmployees();
     }
 
     @Override

@@ -23,7 +23,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     @PostConstruct
-    public void completeSetup() {
+    public void loadUsers() {
         user = new User();
         user.setUsername("joe");
         BCryptPasswordEncoder encoder = passwordEncoder();
