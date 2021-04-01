@@ -1,3 +1,4 @@
+/*
 package com.employee.web.security;
 
 import com.employee.web.model.User;
@@ -31,11 +32,11 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     @PostConstruct
-    public void loadUsers() {
+    public void loadUser() {
         user = jsonLoaderService.getLoadedUser();
         BCryptPasswordEncoder encoder = passwordEncoder();
         user.setPassword(encoder.encode(user.getPassword())); // encrypt password
-        LOGGER.info("Loaded user with credentials " + user.getUsername() + user.getPassword());
+        LOGGER.info("Loaded user with credentials username: " + user.getUsername() + " password: " +  user.getPassword());
     }
 
     @Override
@@ -49,3 +50,4 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
 }
+*/

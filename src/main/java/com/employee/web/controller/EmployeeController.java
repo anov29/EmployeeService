@@ -128,3 +128,4 @@ public class EmployeeController {
 
 // curl -X POST localhost:8080/employees -H 'Content-type:application/json' -d '{"id": 5, "firstName": "Samwise", "middleInitial": "S", "lastName":"Nice", "dateOfBirth":"2018-04-01T07:30:00.000+00:00", "dateOfEmployment": "2018-04-01T07:30:00.000+00:00", "status": "ACTIVE"}'
 // curl -v localhost:8080/employees/5
+// curl -i --user 1:1 localhost:8080/employees/1
