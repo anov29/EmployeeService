@@ -7,9 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class EmployeeServiceApplication {
 
 	public static void main(String[] args) {
-
 		SpringApplication.run(EmployeeServiceApplication.class, args);
-
 	}
 
 }

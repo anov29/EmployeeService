@@ -11,6 +11,6 @@ public interface JSONLoaderService {
 
     HashMap<Long, Employee> getLoadedInactiveEmployees();
 
-    User[] getLoadedUsers();
+    User getLoadedUser();
 
 }

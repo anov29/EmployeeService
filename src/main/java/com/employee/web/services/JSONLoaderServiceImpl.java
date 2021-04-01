@@ -20,11 +20,12 @@ public class JSONLoaderServiceImpl implements JSONLoaderService {
 
     private final HashMap<Long, Employee> activeEmployees = new HashMap<>();
     private final HashMap<Long, Employee> inactiveEmployees = new HashMap<>();
+    private User user;
 
     @PostConstruct
     public void loadConfigs() {
-        // read json config for employees
         try {
+            // read json config for employees
             ObjectMapper mapper = new ObjectMapper();
             String fileName = "employees.json";
             File file = ResourceUtils.getFile("classpath:" + fileName);
@@ -39,6 +40,14 @@ public class JSONLoaderServiceImpl implements JSONLoaderService {
                     inactiveEmployees.put(e.getId(), e);
                 }
             }
+
+            // read json config for authenticated user
+            fileName = "user.json";
+            file = ResourceUtils.getFile("classpath:" + fileName);
+            this.user = mapper.readValue(file, User.class);
+
+            // LOGGER.info(users[0].getPassword());
+            // LOGGER.info(users[0].getUsername());
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -56,7 +65,5 @@ public class JSONLoaderServiceImpl implements JSONLoaderService {
     }
 
     @Override
-    public User[] getLoadedUsers() {
-        return new User[0];
-    }
+    public User getLoadedUser() { return user; }
 }

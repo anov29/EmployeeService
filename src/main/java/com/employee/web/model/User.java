@@ -1,5 +1,7 @@
 package com.employee.web.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,8 +16,13 @@ import java.util.List;
 public class User implements UserDetails {
 
     private String username;
-
     private String password;
+
+    @JsonCreator
+    public User(@JsonProperty("username") String username, @JsonProperty("password") String password) {
+        this.username = username;
+        this.password = password;
+    }
 
     @Override
     public boolean isAccountNonExpired() {
