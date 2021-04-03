@@ -25,6 +25,9 @@ import java.util.TimeZone;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * Tests all HTTP requests in EmployeeController
+ */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class HTTPRequestsTests {
 
@@ -56,8 +59,11 @@ public class HTTPRequestsTests {
         authUser = jsonLoaderService.getLoadedUser();
     }
 
+    /**
+     * Tests that activeEmployees from JSON file matches employees returned from GET request
+     */
     @Test
-    public void testGetEmployees() throws Exception {
+    public void testGetEmployees() {
         ParameterizedTypeReference<HashMap<Long, Employee>>  parameterizedTypeReference = new ParameterizedTypeReference<HashMap<Long, Employee>>(){};
         ResponseEntity<HashMap<Long, Employee>> exchange =
                 restTemplate.exchange("http://localhost:" + port + "/employees", HttpMethod.GET, null, parameterizedTypeReference);
@@ -67,6 +73,9 @@ public class HTTPRequestsTests {
         assertThat(employees.equals(activeEmployees)).isTrue();
     }
 
+    /**
+     * Tests random employee from JSON file matches same employee returned from GET request
+     */
     @Test
     public void testGetEmployee() {
         Map.Entry<Long, Employee> entry = activeEmployees.entrySet().iterator().next();
@@ -77,6 +86,10 @@ public class HTTPRequestsTests {
         assertThat((employee.equals(testEmployee))).isTrue();
     }
 
+    /**
+     * POSTs a testEmployee, and tests that employee is the same from a GET request
+     * @throws ParseException thrown by date formatter
+     */
     @Test
     public void testPostEmployee() throws ParseException {
         JSONObject employeeJSON = new JSONObject();
@@ -105,6 +118,12 @@ public class HTTPRequestsTests {
         assertThat(storedEmployee.equals(testEmployee)).isTrue();
     }
 
+
+    /**
+     * PUTs a testEmployee, and tests that employee is the same from a GET request
+     * @throws ParseException thrown by date formatter
+     */
+
     @Test
     public void testPutEmployees() throws ParseException {
         Long employeeID = activeEmployees.keySet().iterator().next(); // get preexisting employee id
@@ -132,6 +151,9 @@ public class HTTPRequestsTests {
         assertThat(storedEmployee.equals(testEmployee)).isTrue();
     }
 
+    /**
+     * Attempts to delete an employee with no authentication
+     */
     @Test
     public void testDeleteEmployeeNoAuth() {
         Long employeeID = activeEmployees.keySet().iterator().next(); // get preexisting employee id
@@ -143,11 +165,14 @@ public class HTTPRequestsTests {
         assertThat(response.getStatusCode().equals(HttpStatus.UNAUTHORIZED)).isTrue();
     }
 
+    /**
+     * DELETEs an employee with authentication and verifies via GET that the employee is no longer active
+     */
     @Test
     public void testDeleteEmployeeWithAuth() {
         Long employeeID = activeEmployees.keySet().iterator().next(); // get preexisting employee id
 
-        headers.setBasicAuth(authUser.getUsername(), "1234G"); // have to use plaintext password here at authUser passwords is hashed
+        headers.setBasicAuth(authUser.getUsername(), "1234G"); // have to use plaintext password here as authUser password is hashed
         HttpEntity<String> request =
                 new HttpEntity<String>(null, headers);
 
@@ -161,14 +186,10 @@ public class HTTPRequestsTests {
         assertThat(activeEmployees.containsKey(employeeID)).isFalse();
     }
 
-
     private Employee getEmployee(long id) {
         ParameterizedTypeReference<Employee>  parameterizedTypeReference = new ParameterizedTypeReference<Employee>(){};
         ResponseEntity<Employee> exchange =
                 restTemplate.exchange("http://localhost:" + port + "/employees/" + id, HttpMethod.GET, null, parameterizedTypeReference);
         return exchange.getBody();
     }
-
-
-    // curl -X POST localhost:8080/employees -H 'Content-type:application/json' -d '{"id": 5, "firstName": "Samwise", "middleInitial": "S", "lastName":"Nice", "dateOfBirth":"2018-04-01T07:30:00.000+00:00", "dateOfEmployment": "2018-04-01T07:30:00.000+00:00", "status": "ACTIVE"}'
 }

@@ -12,6 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+/**
+ * Rest controller for employee service
+ */
 @RestController
 public class EmployeeController {
 
@@ -24,6 +27,10 @@ public class EmployeeController {
         this.employeeService = employeeService;
     }
 
+    /**
+     * Get all active employees
+     * @return Hashmap of <Employee ID><Active Employee>
+     */
     @GetMapping("/employees")
     public ResponseEntity<HashMap<Long, Employee>> getEmployees() {
         try {
@@ -34,8 +41,13 @@ public class EmployeeController {
         }
     }
 
+    /**
+     * Get active employee by ID
+     * @param id id of employee
+     * @return employee with corresponding id
+     */
     @GetMapping("/employees/{id}")
-    public ResponseEntity<Employee> getEmployee(@PathVariable("id") Long id) throws IllegalArgumentException {
+    public ResponseEntity<Employee> getEmployee(@PathVariable("id") Long id) {
         try {
             if (!employeeService.getActiveEmployees().containsKey(id)) {
                 LOGGER.info("Server retrieved bad request id {}", id);
@@ -49,6 +61,11 @@ public class EmployeeController {
         }
     }
 
+    /**
+     * Create a new employee
+     * @param newEmployee new employee to be created
+     * @return if employee creation was successful
+     */
     @PostMapping("/employees")
     public ResponseEntity<String> newEmployee(@RequestBody Employee newEmployee) {
         try {
@@ -71,6 +88,11 @@ public class EmployeeController {
         }
     }
 
+    /**
+     * Update an existing employee
+     * @param employee employee with updated fields
+     * @return if employee update was successful
+     */
     @PutMapping("/employees")
     public ResponseEntity<String> updateEmployee(@RequestBody Employee employee) {
         try {
@@ -97,6 +119,11 @@ public class EmployeeController {
         }
     }
 
+    /**
+     * Delete an employee
+     * @param id id of employee to delete
+     * @return if employee with corresponding id was deleted
+     */
     @DeleteMapping("/employees/{id}")
     public ResponseEntity<String> deleteEmployee(@PathVariable Long id) {
         try {

@@ -13,6 +13,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
+/**
+ * Service for loading JSON configurations
+ */
 @Service
 public class JSONLoaderServiceImpl implements JSONLoaderService {
 

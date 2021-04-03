@@ -13,6 +13,9 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 
+/**
+ * Service that loads User from JSON and hashes password
+ */
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 

@@ -5,21 +5,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Date;
 
+/**
+ * Class representing employee
+ */
 public class Employee {
 
-    @JsonProperty("id")
     private long id;
-    @JsonProperty("firstName")
     private String firstName;
-    @JsonProperty("middleInitial")
     private String middleInitial;
-    @JsonProperty("lastName")
     private String lastName;
-    @JsonProperty("dateOfBirth")
     private Date dateOfBirth;
-    @JsonProperty("dateOfEmployment")
     private Date dateOfEmployment;
-    @JsonProperty("status")
     private State status;
 
     public enum State {
@@ -31,8 +27,8 @@ public class Employee {
     }
 
     @JsonCreator
-    public Employee(@JsonProperty("id") long id,@JsonProperty("firstName") String firstName,@JsonProperty("middleInitial") String middleInitial,
-                    @JsonProperty("lastName") String lastName,@JsonProperty("dateOfBirth") Date dateOfBirth,@JsonProperty("dateOfEmployment") Date dateOfEmployment,
+    public Employee(@JsonProperty("id") long id, @JsonProperty("firstName") String firstName, @JsonProperty("middleInitial") String middleInitial,
+                    @JsonProperty("lastName") String lastName, @JsonProperty("dateOfBirth") Date dateOfBirth, @JsonProperty("dateOfEmployment") Date dateOfEmployment,
                     @JsonProperty("status") String status) {
 
         // date of employment cannot be before birth
@@ -51,7 +47,7 @@ public class Employee {
             try {
                 this.status = State.valueOf(status);
             } catch (IllegalArgumentException e) {
-                this.status = State.ACTIVE; // by default employees are active
+                this.status = State.ACTIVE;
             }
         }
     }
@@ -84,6 +80,11 @@ public class Employee {
         return status;
     }
 
+    /**
+     * Equals methods was not working by default, so override and manually compare each field
+     * @param o Employee to compare with
+     * @return if fields are the same
+     */
     @Override
     public boolean equals(Object o) {
         if (o == this) {

@@ -9,6 +9,9 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.util.HashMap;
 
+/**
+ * Service for working with Employee model
+ */
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
@@ -30,19 +33,33 @@ public class EmployeeServiceImpl implements EmployeeService {
         inactiveEmployees = jsonLoaderService.getLoadedInactiveEmployees();
     }
 
+    /**
+     * @return Hashmap of all active employees
+     */
     @Override
     public HashMap<Long, Employee> getActiveEmployees() {
         return activeEmployees;
     }
 
+    /**
+     * @return Hashmap of all inactive employees
+     */
     @Override
     public HashMap<Long, Employee> getInactiveEmployees() {
         return inactiveEmployees;
     }
 
+    /**
+     * @param e employee object
+     * @return if employee in either active employees or inactive employees
+     */
     @Override
     public boolean hasEmployee(Employee e) { return (activeEmployees.containsKey(e.getId()) || inactiveEmployees.containsKey(e.getId())); }
 
+    /**
+     * @param id id of employee to delete
+     * @return if deletion is successful
+     */
     @Override
     public boolean deleteEmployee(Long id) {
         try {
@@ -56,6 +73,10 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
     }
 
+    /**
+     * @param e employee to create
+     * @return if creation is successful
+     */
     @Override
     public boolean createEmployee(Employee e) {
         try {
@@ -71,6 +92,10 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
     }
 
+    /**
+     * @param e employee to update
+     * @return if updating is successful
+     */
     @Override
     public boolean updateEmployee(Employee e) {
         try {

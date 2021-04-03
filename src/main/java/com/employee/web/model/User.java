@@ -43,6 +43,9 @@ public class User implements UserDetails {
         return true;
     }
 
+    /**
+     * Don't use authorities in current project, but required method override
+     */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singletonList(new SimpleGrantedAuthority("User"));
