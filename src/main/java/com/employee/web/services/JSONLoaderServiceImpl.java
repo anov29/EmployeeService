@@ -46,9 +46,6 @@ public class JSONLoaderServiceImpl implements JSONLoaderService {
             file = ResourceUtils.getFile("classpath:" + fileName);
             this.user = mapper.readValue(file, User.class);
 
-            // LOGGER.info(users[0].getPassword());
-            // LOGGER.info(users[0].getUsername());
-
         } catch (IOException e) {
             e.printStackTrace();
         }

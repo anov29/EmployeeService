@@ -7,12 +7,19 @@ import java.util.Date;
 
 public class Employee {
 
+    @JsonProperty("id")
     private long id;
+    @JsonProperty("firstName")
     private String firstName;
+    @JsonProperty("middleInitial")
     private String middleInitial;
+    @JsonProperty("lastName")
     private String lastName;
+    @JsonProperty("dateOfBirth")
     private Date dateOfBirth;
+    @JsonProperty("dateOfEmployment")
     private Date dateOfEmployment;
+    @JsonProperty("status")
     private State status;
 
     public enum State {
@@ -75,5 +82,22 @@ public class Employee {
 
     public State getStatus() {
         return status;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+
+        if (!(o instanceof Employee)) {
+            return false;
+        }
+
+        Employee e2 = (Employee) o;
+
+        return this.getId() == e2.getId() && this.getStatus() == e2.getStatus() && this.getDateOfBirth().equals(e2.getDateOfBirth())
+                && this.getDateOfEmployment().equals(e2.getDateOfEmployment()) && this.getFirstName().equals(e2.getFirstName())
+                && this.getMiddleInitial().equals(e2.getMiddleInitial()) && this.getLastName().equals(e2.getLastName());
     }
 }
