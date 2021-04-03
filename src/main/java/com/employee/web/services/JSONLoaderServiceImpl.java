@@ -5,13 +5,18 @@ import com.employee.web.model.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
+
 
 /**
  * Service for loading JSON configurations
@@ -30,9 +35,9 @@ public class JSONLoaderServiceImpl implements JSONLoaderService {
         try {
             // read json config for employees
             ObjectMapper mapper = new ObjectMapper();
-            String fileName = "employees.json";
-            File file = ResourceUtils.getFile("classpath:" + fileName);
-            Employee[] employees = mapper.readValue(file, Employee[].class);
+
+            InputStream is = new ClassPathResource("employees.json").getInputStream();
+            Employee[] employees = mapper.readValue(is, Employee[].class);
 
             // create an active and inactive employee map
             for (Employee e : employees) {
@@ -45,12 +50,11 @@ public class JSONLoaderServiceImpl implements JSONLoaderService {
             }
 
             // read json config for authenticated user
-            fileName = "user.json";
-            file = ResourceUtils.getFile("classpath:" + fileName);
-            this.user = mapper.readValue(file, User.class);
+            is = new ClassPathResource("user.json").getInputStream();
+            this.user = mapper.readValue(is, User.class);
 
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("Error reading JSON files: ", e);
         }
     }
 
