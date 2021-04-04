@@ -10,13 +10,15 @@
 	</parent>
 	<groupId>com.employee</groupId>
 	<artifactId>employee-service</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>${project.version}</version>
 	<name>employee-service</name>
 	<description>Demo project for Employee Service</description>
 	<properties>
 		<java.version>1.8</java.version>
 		<jackson.version>2.10.0</jackson.version>
 		<spring.secuirty>2.3.3.RELEASE</spring.secuirty>
+		<antrun.version>1.8</antrun.version>
+		<project.version>0.0.1-SNAPSHOT</project.version>
 	</properties>
 
 	<dependencies>
@@ -56,6 +58,25 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<!-- Copy built jar into bin/ dir -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>${antrun.version}</version>
+				<executions>
+					<execution>
+						<phase>install</phase>
+						<configuration>
+							<target>
+								<copy file="target/${project.artifactId}-${version}.jar" tofile="${basedir}/bin/${project.artifactId}.jar"/>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
