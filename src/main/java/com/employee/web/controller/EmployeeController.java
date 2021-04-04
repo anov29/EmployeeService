@@ -22,6 +22,11 @@ public class EmployeeController {
 
     private EmployeeService employeeService;
 
+    // Dependency injection of Employee Service
+    // Spring Beans are by default Singletons,
+    // and so this uses the Singletons design pattern
+    // to not recreate instances of the employeeService across the Spring IoC container
+    // Also by injecting an interface we follow the Dependency Inversion Principle
     @Autowired
     public void setEmployeeService(EmployeeService employeeService) {
         this.employeeService = employeeService;
@@ -151,9 +156,3 @@ public class EmployeeController {
                 || e.getDateOfBirth() == null);
     }
 }
-
-
-// curl -X POST localhost:8080/employees -H 'Content-type:application/json' -d '{"id": 5, "firstName": "Samwise", "middleInitial": "S", "lastName":"Nice", "dateOfBirth":"2018-04-01T07:30:00.000+00:00", "dateOfEmployment": "2018-04-01T07:30:00.000+00:00", "status": "ACTIVE"}'
-// curl -v localhost:8080/employees/5
-// curl -X DELETE localhost:8080/employees/1
-// curl -i --user 1:1 localhost:8080/employees/1
